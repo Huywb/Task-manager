@@ -1,8 +1,34 @@
-import React from 'react'
+'use client'
+import CreateCard from '@/app/components/CrreateCard/CreateCard';
+import ListCard from '@/app/components/ListCard/ListCard';
+import { Box, Stack, Typography } from '@mui/material';
+import React, { useState } from 'react'
+import { FaCirclePlus } from 'react-icons/fa6';
 
 const Doitnow = () => {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
-    <div>Doitnow</div>
+    <Box display='flex' flexDirection='column'>
+        <Stack display='flex' flexDirection='row' alignItems='center' justifyContent='space-between'>
+            <Stack className='w-max'borderBottom='4px solid #f5f5f5'>
+            <Typography fontSize={30} fontWeight='bold'>Do It Now</Typography>
+            </Stack>
+            <FaCirclePlus onClick={()=>handleClickOpen()} color='white' fontSize={40} cursor='pointer'></FaCirclePlus>
+            <CreateCard open={open} onClose={handleClose}>
+            </CreateCard>
+        </Stack>
+        <Stack pt={4}>
+            <ListCard></ListCard>
+        </Stack>
+    </Box>
   )
 }
 
