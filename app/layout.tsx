@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { Box, Stack } from "@mui/material";
+import Siderbar from "./components/Siderbar/Siderbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +18,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <Box display='flex' gap={6} p={4} width='100%' height='100%' justifyContent='space-between'>
+          <Stack flex={1}  sx={{border:'2px solid #424242',borderRadius:'10px',bgcolor:'#212121'}}>
+            <Siderbar></Siderbar>
+          </Stack >
+          <Stack flex={5} sx={{border:'2px solid #424242',borderRadius:'10px',bgcolor:'#212121'}}>
+            {children}
+          </Stack>
+        </Box>
+      </body>
     </html>
   );
 }
