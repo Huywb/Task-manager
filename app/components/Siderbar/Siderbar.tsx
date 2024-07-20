@@ -1,50 +1,34 @@
-'use client'
-import { Box, IconButton, Stack, Typography } from '@mui/material'
+"use client"
+import { Box, Button, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { IoIosLogOut } from "react-icons/io";
-import { ListMenu} from '@/utils/menu'
-import { usePathname } from 'next/navigation';
+import {  SignOutButton, UserButton, useUser } from '@clerk/nextjs';
+import Menu from '../Menu/Menu';
 import Link from 'next/link';
-import { UserButton } from '@clerk/nextjs';
-import { auth } from '@clerk/nextjs/server';
-import Image from 'next/image';
-import logo from '../../../public/logo.svg'
 
 const Siderbar = () => {
-    const pathName = usePathname()
-    const {userId} = auth()
-  return (
+    const user = useUser()
+    return (
     <Box p={4} display='flex' flexDirection='column' justifyContent='space-between' height='100%'>
-        <Stack gap={2} flexDirection='row'>
-           <Image src={logo} alt='logo'></Image>
-            <Stack  alignItems='center' >
-                <Typography fontSize={20}>Name</Typography>
-                <Typography fontSize={20} fontWeight='bold'>Name</Typography>
-            </Stack>
+        <Stack alignItems='center' display='flex' justifyContent='center' flexDirection='row' gap={2} >
+            {user.isSignedIn ?<>
+            <UserButton></UserButton>
+            <Typography>{user.user?.username}</Typography>
+            </>:
+            <Box display='flex' width='100%' justifyContent='center'>
+                <Link href='/sign-in' className='w-[100%] flex justify-center'>
+                    <Button sx={{width:'80%',color:'white',bgcolor:'#414141','&:hover':{bgcolor:'#757575'}}}>Login</Button>
+                </Link>
+            </Box>}
         </Stack>
-        <Stack>
-            {ListMenu.map((item,index)=>(
-                    <Box key={index} sx={{opacity:`${pathName === item.route ? '1' : '0.5'}`,
-                                        bgcolor:`${pathName === item.route ? '#424242   ' : ''}`,
-                                        borderRadius:'10px',
-                                        cursor:'pointer',
-                                        '&:hover':{
-                                            opacity:1
-                                        },
-                                        transition:'0.3s' }} display='flex' alignItems='center' paddingY={1} gap={4}>
-                        <IconButton>{item.logo}</IconButton>
-                        <Link href={item.route}>
-                        <Typography>{item.name}</Typography>
-                        </Link>
-                    </Box>
-            ))}
-        </Stack>
+        <Menu></Menu>
         <Stack flexDirection='row' gap={2} alignItems='center'>
+            {user.isSignedIn ?
+                <>
             <IoIosLogOut fontSize={30}></IoIosLogOut>
-            <Link href='/'>
-            <Typography>Sign out</Typography>
-
-            </Link>
+            <SignOutButton></SignOutButton>
+            </>: ''
+            }
         </Stack>
     </Box>
   )
