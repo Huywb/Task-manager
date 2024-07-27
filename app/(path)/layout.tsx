@@ -4,7 +4,8 @@ import "../globals.css";
 import { Box, Stack } from "@mui/material";
 import { ClerkProvider } from "@clerk/nextjs";
 import Siderbar from "../components/Siderbar/Siderbar";
-
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -32,6 +33,8 @@ export default function RootLayout({
               </Box>
             </Stack>
           </Box>
+        <ToastContainer />
+
         </body>
       </ClerkProvider>  
 

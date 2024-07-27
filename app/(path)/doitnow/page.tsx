@@ -1,11 +1,33 @@
 'use client'
 import CreateCard from '@/app/components/CrreateCard/CreateCard';
 import ListCard from '@/app/components/ListCard/ListCard';
+import { useUser } from '@clerk/nextjs';
 import { Box, Stack, Typography } from '@mui/material';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaCirclePlus } from 'react-icons/fa6';
 
 const Doitnow = () => {
+  const [listTask,setListTask] = useState([])
+    const user = useUser()
+    const id = user.user?.id
+    
+    const getListTask =async (id:string)=>{
+      setTimeout(async() => {
+        const data = await fetch(`http://localhost:3000/api/task/${id}`)
+        const tasks = await data.json()
+        const listData = tasks.filter((item:any)=>item.isCompleted === false)
+        setListTask(listData)
+      }, 2000);
+        
+    }
+    useEffect(()=>{
+        if(id){
+          localStorage.setItem('id',id)
+          const url = localStorage.getItem('id')
+          getListTask(url || '')
+
+         }
+    },[user.user?.id])
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -26,7 +48,7 @@ const Doitnow = () => {
             </CreateCard>
         </Stack>
         <Stack pt={4}>
-            <ListCard></ListCard>
+            <ListCard listTask={listTask}></ListCard>
         </Stack>
     </Box>
   )
